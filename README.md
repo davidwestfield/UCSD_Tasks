@@ -7,3 +7,9 @@ Planned features:
 - Bid on tasks
 - Sort tasks by rating, distance, pay
 - Default sort is algorithim combining the above
+
+Developers:
+- Daniel Sonnier
+- Kevin Wong
+- Anil Jethani
+- Raj Kumar
