@@ -7,6 +7,8 @@ Planned features:
 - Bid on tasks
 - Sort tasks by rating, distance, pay
 - Default sort is algorithim combining the above
+- Firebase data storage/ authentication through UI
+
 
 Developers:
 - Daniel Sonnier
