@@ -91,7 +91,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      * It will enable location tracking and zoom to user's location.
      */
 
-    // This will run automatically after user approves location data
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (enableLocationZoom()) {
