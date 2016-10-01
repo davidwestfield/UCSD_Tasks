@@ -70,9 +70,8 @@
             android:layout_margin="16dp"
             android:src="@drawable/ic_done_white_24dp"
             android:clickable="true"
-            android:onClick="doneEnteringData"
+            android:onClick="pushTask"
             app:layout_anchorGravity="bottom|right|end" />
 
     </android.support.design.widget.CoordinatorLayout>
-
 </LinearLayout>
