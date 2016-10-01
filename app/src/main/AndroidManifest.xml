@@ -33,10 +33,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_application_id"/>
+            android:value="@string/facebook_application_id" />
 
         <activity
             android:name=".MapsActivity"
@@ -46,6 +45,15 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".CreateTask"
+            android:label="@string/title_activity_create_task">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
         </activity>
     </application>
 

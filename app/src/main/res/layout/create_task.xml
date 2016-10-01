@@ -26,18 +26,18 @@
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
         android:paddingTop="8dp"
-        android:text="Starting After:"
+        android:text="Starting Offer:"
         android:textSize="18sp" />
 
     <EditText
-        android:id="@+id/starting_after"
+        android:id="@+id/starting_offer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="$0.00"
+        android:inputType="numberDecimal"
         android:paddingLeft="16dp"
         android:textColorHint="#BDBDBD"
-        android:textSize="16sp"
-        android:inputType="numberDecimal"/>
+        android:textSize="16sp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -54,13 +54,11 @@
         android:hint="9450 Gilman Dr."
         android:paddingLeft="16dp"
         android:textColorHint="#BDBDBD"
-        android:textSize="16sp"
-        android:inputType="numberDecimal"/>
+        android:textSize="16sp" />
 
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/main_content"
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -71,6 +69,8 @@
             android:layout_gravity="bottom|right"
             android:layout_margin="16dp"
             android:src="@drawable/ic_done_white_24dp"
+            android:clickable="true"
+            android:onClick="doneEnteringData"
             app:layout_anchorGravity="bottom|right|end" />
 
     </android.support.design.widget.CoordinatorLayout>
