@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "813415604510",
+    "firebase_url": "https://ucsd-tasks.firebaseio.com",
+    "project_id": "ucsd-tasks",
+    "storage_bucket": "ucsd-tasks.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:813415604510:android:b0a093ba5d25f08f",
+        "android_client_info": {
+          "package_name": "com.ucsdtasks.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "813415604510-n7iakuthoq9clm4s95598e4t9kig9gat.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCf2z8BR2L14-ZfEe1jHO7_0dtCj-n3ETQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
