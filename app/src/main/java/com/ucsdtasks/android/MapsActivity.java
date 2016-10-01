@@ -10,8 +10,12 @@ import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -41,15 +45,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     100);
         }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
     }
 
 
@@ -64,15 +66,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        /* This is price center
-        LatLng UCSD = new LatLng(32.879459, -117.237167);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(UCSD, 15.0f)); */
-
-        mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);  // adding the +/- button on the map
         mMap.getUiSettings().setAllGesturesEnabled(true);   // pinch to zoom on map
-        mMap.setMyLocationEnabled(true);    // Shows where we are currently
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.GPS_PROVIDER;
@@ -80,6 +75,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return;
         }
         locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
+
+        // checks if user granted permission for location
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
+                        PackageManager.PERMISSION_GRANTED) {
+
+            // enables location features
+            mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+            // moves camera to current user location, zooms
+            LocationManager asdf = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Location location = asdf.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.0f));
+        } else {
+
+            // request location ability
+            ActivityCompat.requestPermissions(this, new String[]{
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        }
+
 
         // Map On Click listener
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -103,23 +122,41 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
+
+    // This will run automatically after user approves location data
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
+                        PackageManager.PERMISSION_GRANTED) {
+
+            // enables location features
+            mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+            // moves camera to current user location, zooms
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.0f));
+        } else {
+            Toast.makeText(this, "Location not enabled", Toast.LENGTH_LONG).show();
+        }
+    }
+
     // Needed to notify the user when a friend is nearby the marked position
     LocationListener locationListener = new LocationListener() {
         @Override
-        public void onLocationChanged(Location location) {
-
-        }
+        public void onLocationChanged(Location location) {}
 
         @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
 
         @Override
-        public void onProviderEnabled(String provider) {
-        }
+        public void onProviderEnabled(String provider) {}
 
         @Override
-        public void onProviderDisabled(String provider) {
-        }
+        public void onProviderDisabled(String provider) {}
     };
 }
