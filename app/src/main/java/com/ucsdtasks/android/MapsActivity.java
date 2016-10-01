@@ -32,6 +32,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        /*
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             //
@@ -45,7 +46,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     100);
         }
-
+        */
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -76,29 +77,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
 
-        // checks if user granted permission for location
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
-                        PackageManager.PERMISSION_GRANTED) {
-
-            // enables location features
-            mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setMyLocationButtonEnabled(true);
-
-            // moves camera to current user location, zooms
-            LocationManager asdf = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            Location location = asdf.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.0f));
-        } else {
-
-            // request location ability
-            ActivityCompat.requestPermissions(this, new String[]{
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        // Attempts to enable location and zoom to map
+        if (enableLocationZoom()) {
         }
-
+        // Needs permissions for location, so requests
+        else {
+            ActivityCompat.requestPermissions(this, new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        }
 
         // Map On Click listener
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -126,6 +113,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     // This will run automatically after user approves location data
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (enableLocationZoom()) {
+        }
+        else {
+            Toast.makeText(this, "Location not enabled", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    // Checks if user granted locations permissions and enables location features + zooms if they did
+    private boolean enableLocationZoom() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
@@ -140,8 +136,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.0f));
-        } else {
-            Toast.makeText(this, "Location not enabled", Toast.LENGTH_LONG).show();
+
+            return true;
+        }
+        // user did not enable location permissions
+        else {
+            return false;
         }
     }
 
