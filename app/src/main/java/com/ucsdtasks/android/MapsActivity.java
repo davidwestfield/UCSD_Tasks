@@ -25,10 +25,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 
 
+/**
+ * Class MapsActivity
+ *
+ * Generates a google maps layout on users screen and requests locations permissions, which if
+ * granted, will use to zoom to user's location on map and enable location tracking.
+ */
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    public double latitudeM, longitudeM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +53,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     100);
         }
         */
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -57,13 +65,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     /**
-     * Manipulates the map once available.
+     * Method onMapReady
+     *
      * This callback is triggered when the map is ready to be used.
      * This is where we can add markers or lines, add listeners or move the camera.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -97,9 +107,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 // Set marker position
                 markerOptions.position(latLng);
 
-                latitudeM = latLng.latitude;
-                longitudeM = latLng.longitude;
-
                 // Clear previous marker
                 mMap.clear();
                 // Animate it when a location is pressed
@@ -109,6 +116,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
+
+
+    /**
+     * Method onRequestPermissionsResults
+     *
+     * This callback is triggered when the user approves locations permissions.
+     * It will enable location tracking and zoom to user's location.
+     */
 
     // This will run automatically after user approves location data
     @Override
@@ -120,7 +135,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    // Checks if user granted locations permissions and enables location features + zooms if they did
+
+    /**
+     * Method enableLocationZoom
+     *
+     * Checks if user granted locations permissions and enables location features + zooms to their
+     * location if they did.
+     */
+
     private boolean enableLocationZoom() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED &&
@@ -145,7 +167,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    // Needed to notify the user when a friend is nearby the marked position
+
+    /**
+     * Variable locationListener
+     *
+     * Needed to notify the user when a friend is nearby the marked position.
+     */
+
     LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {}
