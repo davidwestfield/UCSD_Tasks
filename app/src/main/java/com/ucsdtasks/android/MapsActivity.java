@@ -3,6 +3,7 @@ package com.ucsdtasks.android;
 import android.*;
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -10,21 +11,21 @@ import android.location.LocationManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.View;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
-
-import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.auth.FirebaseAuth;
 
 
+
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 /**
  * Class MapsActivity
  *
@@ -32,32 +33,13 @@ import com.google.firebase.auth.FirebaseAuth;
  * granted, will use to zoom to user's location on map and enable location tracking.
  */
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
-
     private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        /*
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() != null) {
-            //
-        } else {
-            startActivityForResult(
-                    // Get an instance of AuthUI based on the default app
-                    AuthUI.getInstance()
-                            .createSignInIntentBuilder()
-                            .setProviders(AuthUI.FACEBOOK_PROVIDER)
-                            .build(),
-
-                    100);
-        }
-        */
-
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -171,4 +153,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         @Override
         public void onProviderDisabled(String provider) {}
     };
+
 }
