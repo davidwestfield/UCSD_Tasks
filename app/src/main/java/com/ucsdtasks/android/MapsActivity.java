@@ -22,13 +22,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
-            // already signed in
+            auth.signOut();
         } else {
             startActivityForResult(
                     // Get an instance of AuthUI based on the default app
-                    AuthUI.getInstance().createSignInIntentBuilder().build(),
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setProviders(AuthUI.FACEBOOK_PROVIDER)
+                            .build(),
+
                     100);
         }
+
 
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
