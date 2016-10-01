@@ -1,4 +1,4 @@
-package com.example.daniel.ucsdtasks;
+package com.ucsdtasks.android;
 
 import org.junit.Test;
 

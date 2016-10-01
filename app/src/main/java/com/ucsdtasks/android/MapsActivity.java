@@ -1,4 +1,4 @@
-package com.example.daniel.ucsdtasks;
+package com.ucsdtasks.android;
 
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;

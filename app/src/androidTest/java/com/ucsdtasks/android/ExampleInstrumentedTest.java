@@ -1,4 +1,4 @@
-package com.example.daniel.ucsdtasks;
+package com.ucsdtasks.android;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.daniel.ucsdtasks", appContext.getPackageName());
+        assertEquals("com.ucsdtasks.android", appContext.getPackageName());
     }
 }
