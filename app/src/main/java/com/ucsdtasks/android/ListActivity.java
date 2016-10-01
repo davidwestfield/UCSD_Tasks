@@ -18,6 +18,9 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Class ListActivity
@@ -28,7 +31,8 @@ import com.google.android.gms.maps.model.LatLng;
 public class ListActivity extends AppCompatActivity {
     private ListView listView;
     private LatLng currentLoc;
-    // private List<Task> tasks = new ArrayList<Task>();
+    //private List<Task> tasks = new List<Task>();
+    private List<String> taskTitles = new ArrayList<String>();
 
     private double SEARCH_RADIUS = 0.6; // TODO temporary
 
@@ -71,19 +75,15 @@ public class ListActivity extends AppCompatActivity {
         //tasks = getTasks(currentLoc, SEARCH_RADIUS);
 
         // Task objects will have ID, title, author, bid, description, and location
-
-        // Values to be shown in ListView
-        String[] values = new String[] {
-                "Walk dog",
-                "Buy milk",
-                "Sing a song",
-                "Bring me food",
-                "Etc"
-        };
+        /*
+        for (task : tasks) {
+            taskTitles.add(task.getTitle());
+        }
+        */
 
         // (Context, Layout for row, ID of TextView to write data to, Array of data)
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, values);
+                android.R.layout.simple_list_item_1, android.R.id.text1, taskTitles);
 
         // Assign adapter to ListView
         listView.setAdapter(adapter);
