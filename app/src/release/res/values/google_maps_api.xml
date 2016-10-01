@@ -17,6 +17,6 @@
     string in this file.
     -->
     <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
-        YOUR_KEY_HERE
+        AIzaSyDr4oSLHqlKUS0M6IXGtmgxoGDtC5g6p0o
     </string>
 </resources>
