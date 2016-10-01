@@ -82,7 +82,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         String locationProvider = LocationManager.GPS_PROVIDER;
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
             return;
         }
         locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
@@ -96,25 +99,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
-
-        // Map On Click listener
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-
-                // Create the marker
-                MarkerOptions markerOptions = new MarkerOptions();
-                // Set marker position
-                markerOptions.position(latLng);
-
-                // Clear previous marker
-                mMap.clear();
-                // Animate it when a location is pressed
-                mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-                // Finally place the marker on the touched position
-                mMap.addMarker(markerOptions);
-            }
-        });
     }
 
 
