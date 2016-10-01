@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
+import com.ucsdtasks.android.ListActivity;
 import com.ucsdtasks.android.MapsActivity;
 import com.ucsdtasks.android.R;
 
@@ -17,6 +18,9 @@ public class AuthActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        startActivity(new Intent(this, ListActivity.class));
+
+        /*
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() != null) {
             // User is already signed in. Show task map!
@@ -39,5 +43,6 @@ public class AuthActivity extends AppCompatActivity {
                     RC_SIGN_IN);
         }
 
+*/
     }
 }

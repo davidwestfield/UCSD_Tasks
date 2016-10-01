@@ -24,8 +24,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
-
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 /**
  * Class MapsActivity
  *
@@ -33,13 +31,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
  * granted, will use to zoom to user's location on map and enable location tracking.
  */
 
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);

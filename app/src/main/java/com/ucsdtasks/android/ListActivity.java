@@ -1,7 +1,10 @@
 package com.ucsdtasks.android;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
@@ -11,7 +14,7 @@ import android.widget.ListView;
  * Generates a list view of the tasks to be done in the user's area.
  */
 
-public class ListActivity extends Activity {
+public class ListActivity extends AppCompatActivity {
     ListView listView ;
 
     @Override
@@ -22,48 +25,37 @@ public class ListActivity extends Activity {
         // Get ListView object from xml
         listView = (ListView) findViewById(R.id.list);
 
-        // Defined Array values to show in ListView
-        String[] values = new String[] { "Android List View",
-                "Adapter implementation",
-                "Simple List View In Android",
-                "Create List View Android",
-                "Android Example",
-                "List View Source Code",
-                "List View Array Adapter",
-                "Android Example List View"
+        // Values to be shown in ListView
+        String[] values = new String[] {
+                "Sample 1",
+                "Sample 2",
+                "Sample 3",
+                "Sample 4",
+                "Sample 5"
         };
 
-        // Define a new Adapter
-        // First parameter - Context
-        // Second parameter - Layout for the row
-        // Third parameter - ID of the TextView to which the data is written
-        // Forth - the Array of data
-
+        // (Context, Layout for row, ID of TextView to write data to, Array of data)
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, android.R.id.text1, values);
-
 
         // Assign adapter to ListView
         listView.setAdapter(adapter);
 
-        // ListView Item Click Listener
-        listView.setOnItemClickListener(new OnItemClickListener() {
 
+        /**
+         * Method onItemClick
+         *
+         * Listens for clicks on the list's items.
+         *
+         * @param position   Index of item clicked
+         */
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-
-                // ListView Clicked item index
-                int itemPosition     = position;
-
-                // ListView Clicked item value
-                String  itemValue    = (String) listView.getItemAtPosition(position);
-
-                // Show Alert
-                Toast.makeText(getApplicationContext(),
-                        "Position :"+itemPosition+"  ListItem : " +itemValue , Toast.LENGTH_LONG)
-                        .show();
-
+                // Grabs name of clicked item
+                String itemName = (String) listView.getItemAtPosition(position);
             }
         });
     }
