@@ -14,7 +14,7 @@ import static android.R.attr.author;
  */
 
 @IgnoreExtraProperties
-public class Task {
+public class UCSDTask {
     private String uid;
     private String title;
     private String description;
@@ -24,11 +24,11 @@ public class Task {
 
     private String askingPrice;
 
-    public Task() {
-        // Default constructor required for calls to DataSnapshot.getValue(Task.class)
+    public UCSDTask() {
+        // Default constructor required for calls to DataSnapshot.getValue(UCSDTask.class)
     }
 
-    public Task(String uid, String title, String authorID, String askingPrice, String description) {
+    public UCSDTask(String uid, String title, String authorID, String askingPrice, String description) {
         this.uid = uid;
         this.title = title;
         this.authorID = authorID;
@@ -55,16 +55,4 @@ public class Task {
     public String getDescription() {
         return this.description;
     }
-
-    @Exclude
-    public Map<String, Object> toMap() {
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("uid", uid);
-        result.put("author", author);
-        result.put("title", title);
-        result.put("description", description);
-        result.put("asking_price", askingPrice);
-        return result;
-    }
-
 }
