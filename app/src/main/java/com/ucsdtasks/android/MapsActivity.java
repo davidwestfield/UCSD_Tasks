@@ -18,13 +18,24 @@ import android.view.Menu;
 import android.view.View;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
+
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQuery;
+import com.firebase.geofire.GeoQueryEventListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -38,6 +49,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private double longitude;
     private double latitude;
+    private GeoQuery geoQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +73,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      */
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(final GoogleMap googleMap) {
         mMap = googleMap;
         mMap.getUiSettings().setZoomControlsEnabled(true);  // adding the +/- button on the map
         mMap.getUiSettings().setAllGesturesEnabled(true);   // pinch to zoom on map
@@ -78,6 +90,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Attempts to enable location and zoom to map
         if (enableLocationZoom()) {
+            final Location loc = locationManager.getLastKnownLocation(locationProvider);
+            latitude = loc.getLatitude();
+            longitude = loc.getLongitude();
         }
         // Needs permissions for location, so requests
         else {
@@ -86,9 +101,49 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
 
-        Location location = locationManager.getLastKnownLocation(locationProvider);
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
+        final Location loc = locationManager.getLastKnownLocation(locationProvider);
+        latitude = loc.getLatitude();
+        longitude = loc.getLongitude();
+
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        GeoFire geoFire = new GeoFire(ref.child("geofire"));
+        geoQuery = geoFire.queryAtLocation(new GeoLocation(latitude, longitude), 40);
+
+
+        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+            private HashMap<String, Marker> markers = new HashMap<>();
+
+            @Override
+            public void onKeyEntered(String key, GeoLocation location) {
+                markers.put(key, googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(location.latitude, location.longitude))
+                        .title("Hello, World")));
+            }
+
+            @Override
+            public void onKeyExited(String key) {
+                markers.remove(key).remove();
+            }
+
+            @Override
+            public void onKeyMoved(String key, GeoLocation location) {
+                onKeyExited(key);
+                onKeyEntered(key, location);
+
+            }
+
+            @Override
+            public void onGeoQueryReady() {
+
+            }
+
+            @Override
+            public void onGeoQueryError(DatabaseError error) {
+
+            }
+        });
+
 
     }
 
@@ -170,6 +225,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent mainAcitivity = new Intent("android.intent.action.CREATE");
         mainAcitivity.putExtra("Longitude", longitude);
         mainAcitivity.putExtra("Latitude", latitude);
+        mainAcitivity.putExtra("Zoom", mMap.getCameraPosition().zoom);
         mainAcitivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(mainAcitivity);
     }

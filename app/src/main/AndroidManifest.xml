@@ -42,20 +42,23 @@
             android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".CreateTask"
             android:label="@string/title_activity_create_task">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
-        <activity android:name=".MapsActivity"></activity>
+        <activity android:name=".MapsActivity" />
+        <activity
+            android:name=".LocationPickerActivity"
+            android:label="@string/title_activity_location_picker"></activity>
     </application>
 
 </manifest>

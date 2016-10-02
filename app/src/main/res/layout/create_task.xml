@@ -47,14 +47,17 @@
         android:text="Specify Location:"
         android:textSize="18sp" />
 
-    <EditText
+
+    <TextView
         android:id="@+id/specify_location"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="9450 Gilman Dr."
+        android:hint="Current Location"
         android:paddingLeft="16dp"
         android:textColorHint="#BDBDBD"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:onClick="openPlaceSelector"
+        />
 
     <TextView
         android:layout_width="match_parent"
