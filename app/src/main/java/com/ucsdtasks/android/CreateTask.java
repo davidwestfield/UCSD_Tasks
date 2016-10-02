@@ -15,9 +15,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import com.ucsdtasks.backend.UCSDTask;
 
-import static android.R.attr.keepScreenOn;
-import static android.R.attr.key;
-
 public class CreateTask extends AppCompatActivity {
 
     String task_name;
