@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.ucsdtasks.backend.UCSDTask;
+
 /**
  * Class TaskDetailsActivity
  *
@@ -18,11 +20,8 @@ public class TaskDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_details);
 
-        // get the UCSD task from parceable, unpack it, pass it to update texts
-        Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-            updateTexts(extras.getParcelable());
-        }
+        // get the UCSD task from parceable, pass it to update texts
+        updateTexts((UCSDTask) getIntent().getExtras().getParcelable("TASK"));
     }
 
 
@@ -40,8 +39,8 @@ public class TaskDetailsActivity extends AppCompatActivity {
 
         // Sets texts from task
         titleText.setText(task.getTitle());
-        bidText.setText(task.getBid());
-        authorText.setText(task.getAuthor());
+        bidText.setText(task.getAskingPrice());
+        authorText.setText(task.getAuthorID());
         descriptionText.setText(task.getDescription());
     }
 }

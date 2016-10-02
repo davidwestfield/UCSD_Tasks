@@ -1,5 +1,8 @@
 package com.ucsdtasks.backend;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.auth.api.model.StringList;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
@@ -14,7 +17,7 @@ import static android.R.attr.author;
  */
 
 @IgnoreExtraProperties
-public class UCSDTask {
+public class UCSDTask implements Parcelable {
     private String uid;
     private String title;
     private String description;
@@ -55,4 +58,39 @@ public class UCSDTask {
     public String getDescription() {
         return this.description;
     }
+
+    public UCSDTask(Parcel in) {
+        uid = in.readString();
+        title = in.readString();
+        description = in.readString();
+        authorID = in.readString();
+        askingPrice = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(uid);
+        dest.writeString(title);
+        dest.writeString(description);
+        dest.writeString(authorID);
+        dest.writeString(askingPrice);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<UCSDTask> CREATOR = new Parcelable.Creator<UCSDTask>() {
+        @Override
+        public UCSDTask createFromParcel(Parcel in) {
+            return new UCSDTask(in);
+        }
+
+        @Override
+        public UCSDTask[] newArray(int size) {
+            return new UCSDTask[size];
+        }
+    };
 }

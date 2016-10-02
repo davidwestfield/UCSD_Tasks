@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.ucsdtasks.android.auth.AuthActivity;
+import com.ucsdtasks.backend.UCSDTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ import java.util.List;
 public class ListActivity extends AppCompatActivity {
     private ListView listView;
     private LatLng currentLoc;
-    private List<UCSDTask> tasks = new List<UCSDTask>();
+    private List<UCSDTask> tasks = new ArrayList<UCSDTask>();
     private List<String> taskTitles = new ArrayList<String>();
 
     private double SEARCH_RADIUS = 0.6; // TODO temporary
@@ -76,8 +77,15 @@ public class ListActivity extends AppCompatActivity {
         // Requests tasks passing in user's current location and radius to look for tasks
         //tasks = getTasks(currentLoc, SEARCH_RADIUS);
 
+        // These are temporary testers
+        UCSDTask temp = new UCSDTask("Dave", "Walk Dog", "John", "$2.00", "Please walk my dog he is a very horny boy.");
+        tasks.add(temp);
+        UCSDTask fs = new UCSDTask("Alex", "Get Milk", "Steve", "$3.00", "Please get milk or me i really want it.");
+        tasks.add(fs);
+        // End temporary testers
+
         // Task objects will have ID, title, author, bid, description, and location
-        for (task : tasks) {
+        for (UCSDTask task : tasks) {
             taskTitles.add(task.getTitle());
         }
 
