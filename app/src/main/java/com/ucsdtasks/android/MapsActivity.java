@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -35,6 +36,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
  */
 
     private GoogleMap mMap;
+    private double longitude;
+    private double latitude;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,13 +87,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         Location location = locationManager.getLastKnownLocation(locationProvider);
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
 
-        String lat = Double.toString(latitude);
-        String longi = Double.toString(longitude);
-
-        Toast.makeText(this, lat + "," + longi, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -153,9 +152,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-
-//            double latitude = location.getLatitude();
-//            double longitude = location.getLongitude();
+            longitude = location.getLongitude();
+            latitude = location.getLatitude();
         }
 
         @Override
@@ -170,6 +168,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void createTask(View view) {
         Intent mainAcitivity = new Intent("android.intent.action.CREATE");
+        mainAcitivity.putExtra("Longitude", longitude);
+        mainAcitivity.putExtra("Latitude", latitude);
         mainAcitivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(mainAcitivity);
     }

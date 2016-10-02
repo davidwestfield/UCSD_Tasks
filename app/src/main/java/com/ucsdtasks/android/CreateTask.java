@@ -43,12 +43,20 @@ public class CreateTask extends AppCompatActivity {
 
         // Storing and parsing from string to wanted data type
         task_name = task_name_ET.getText().toString();
-        location = location_ET.getText().toString();
+
+        // TODO: Location should open a map, not be a text edit.
+        // location = location_ET.getText().toString();
+
+        Bundle extras = getIntent().getExtras();
+        double longitude, latitude = 0;
+        if (extras != null) {
+            longitude = extras.getDouble("Longitude");
+            latitude = extras.getDouble("Latitude");
+        }
         description = description_ET.getText().toString();
         starting_offer = Double.parseDouble(starting_offer_ET.getText().toString());
-
         Toast.makeText(this, "Task submitted", Toast.LENGTH_SHORT).show();
-
         super.onBackPressed();
     }
+    
 }
