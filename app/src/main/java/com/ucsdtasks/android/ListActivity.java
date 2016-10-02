@@ -2,6 +2,7 @@ package com.ucsdtasks.android;
 
 import android.*;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.ucsdtasks.android.auth.AuthActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +33,7 @@ import java.util.List;
 public class ListActivity extends AppCompatActivity {
     private ListView listView;
     private LatLng currentLoc;
-    //private List<Task> tasks = new List<Task>();
+    private List<UCSDTask> tasks = new List<UCSDTask>();
     private List<String> taskTitles = new ArrayList<String>();
 
     private double SEARCH_RADIUS = 0.6; // TODO temporary
@@ -75,11 +77,9 @@ public class ListActivity extends AppCompatActivity {
         //tasks = getTasks(currentLoc, SEARCH_RADIUS);
 
         // Task objects will have ID, title, author, bid, description, and location
-        /*
         for (task : tasks) {
             taskTitles.add(task.getTitle());
         }
-        */
 
         // (Context, Layout for row, ID of TextView to write data to, Array of data)
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -92,17 +92,21 @@ public class ListActivity extends AppCompatActivity {
         /**
          * Method onItemClick
          *
-         * Listens for clicks on the list's items.
+         * Listens for clicks on the list's tasks, and launches a view detailing that task.
          *
          * @param position   Index of item clicked
          */
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                // Grabs name of clicked item
-                String itemName = (String) listView.getItemAtPosition(position);
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // Grabs task from clicked item
+                UCSDTask ucsdTask = tasks.get(position);
+
+                // Launches details window passing along task as a parceable
+                Intent detailIntent = new Intent(ListActivity.this, TaskDetailsActivity.class);
+                detailIntent.putExtra("TASK", ucsdTask);
+                startActivity(detailIntent);
             }
         });
     }
