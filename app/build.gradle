@@ -51,6 +51,8 @@ dependencies {
     // FirebaseUI Storage only
     compile 'com.firebaseui:firebase-ui-storage:0.6.0'
 
+    compile 'com.firebase:geofire-android:2.1.0'
+
     testCompile 'junit:junit:4.12'
 }
 
