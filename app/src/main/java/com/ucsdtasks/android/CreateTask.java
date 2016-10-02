@@ -11,10 +11,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import static android.R.attr.description;
+
 public class CreateTask extends AppCompatActivity {
 
     String task_name;
     String location;
+    String description;
     double starting_offer;
 
     @Override
@@ -29,6 +32,7 @@ public class CreateTask extends AppCompatActivity {
         final EditText task_name_ET = (EditText) findViewById(R.id.task_name);
         final EditText starting_offer_ET = (EditText) findViewById(R.id.starting_offer);
         final EditText location_ET = (EditText) findViewById(R.id.specify_location);
+        final EditText description_ET = (EditText) findViewById(R.id.description);
 
         // Error checking
         if(task_name_ET.getText().toString().matches("") ||
@@ -40,6 +44,7 @@ public class CreateTask extends AppCompatActivity {
         // Storing and parsing from string to wanted data type
         task_name = task_name_ET.getText().toString();
         location = location_ET.getText().toString();
+        description = description_ET.getText().toString();
         starting_offer = Double.parseDouble(starting_offer_ET.getText().toString());
 
         Toast.makeText(this, "Task submitted", Toast.LENGTH_SHORT).show();

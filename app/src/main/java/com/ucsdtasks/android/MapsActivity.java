@@ -82,6 +82,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
+
+        Location location = locationManager.getLastKnownLocation(locationProvider);
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+
+        String lat = Double.toString(latitude);
+        String longi = Double.toString(longitude);
+
+        Toast.makeText(this, lat + "," + longi, Toast.LENGTH_SHORT).show();
     }
 
 
@@ -143,7 +152,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     LocationListener locationListener = new LocationListener() {
         @Override
-        public void onLocationChanged(Location location) {}
+        public void onLocationChanged(Location location) {
+
+//            double latitude = location.getLatitude();
+//            double longitude = location.getLongitude();
+        }
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {}
