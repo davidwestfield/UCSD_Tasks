@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
@@ -221,6 +222,28 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         public void onProviderDisabled(String provider) {}
     };
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.option_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if(id == R.id.create_task) {
+            Intent mainAcitivity = new Intent("android.intent.action.CREATE");
+            mainAcitivity.putExtra("Longitude", longitude);
+            mainAcitivity.putExtra("Latitude", latitude);
+            mainAcitivity.putExtra("Zoom", mMap.getCameraPosition().zoom);
+            mainAcitivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(mainAcitivity);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+/*
     public void createTask(View view) {
         Intent mainAcitivity = new Intent("android.intent.action.CREATE");
         mainAcitivity.putExtra("Longitude", longitude);
@@ -229,4 +252,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mainAcitivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(mainAcitivity);
     }
+
+*/
 }
