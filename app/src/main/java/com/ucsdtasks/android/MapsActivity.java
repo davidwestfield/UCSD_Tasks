@@ -9,11 +9,13 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.nfc.Tag;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,12 +33,24 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.ucsdtasks.backend.UCSDTask;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static android.R.attr.key;
+import static android.R.attr.value;
+import static android.R.attr.x;
+import static android.os.Build.VERSION_CODES.M;
+import static com.google.android.gms.internal.zznu.is;
 
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -50,6 +64,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private double longitude;
     private double latitude;
+    private double radius = 40.0;
+    private LocationManager locationManager;
     private GeoQuery geoQuery;
 
     @Override
@@ -79,75 +95,100 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.getUiSettings().setZoomControlsEnabled(true);  // adding the +/- button on the map
         mMap.getUiSettings().setAllGesturesEnabled(true);   // pinch to zoom on map
 
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        String locationProvider = LocationManager.GPS_PROVIDER;
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
                         PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        locationManager.requestLocationUpdates(locationProvider, 0, 0, locationListener);
-
-        // Attempts to enable location and zoom to map
-        if (enableLocationZoom()) {
-            final Location loc = locationManager.getLastKnownLocation(locationProvider);
-            latitude = loc.getLatitude();
-            longitude = loc.getLongitude();
-        }
-        // Needs permissions for location, so requests
-        else {
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
-
-        final Location loc = locationManager.getLastKnownLocation(locationProvider);
-        latitude = loc.getLatitude();
-        longitude = loc.getLongitude();
-
-
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        GeoFire geoFire = new GeoFire(ref.child("geofire"));
-        geoQuery = geoFire.queryAtLocation(new GeoLocation(latitude, longitude), 40);
-
-
-        geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
-            private HashMap<String, Marker> markers = new HashMap<>();
-
-            @Override
-            public void onKeyEntered(String key, GeoLocation location) {
-                markers.put(key, googleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(location.latitude, location.longitude))
-                        .title("Hello, World")));
-            }
-
-            @Override
-            public void onKeyExited(String key) {
-                markers.remove(key).remove();
-            }
-
-            @Override
-            public void onKeyMoved(String key, GeoLocation location) {
-                onKeyExited(key);
-                onKeyEntered(key, location);
-
-            }
-
-            @Override
-            public void onGeoQueryReady() {
-
-            }
-
-            @Override
-            public void onGeoQueryError(DatabaseError error) {
-
-            }
-        });
+        else {
+            startUp();
+        }
 
 
     }
 
+
+    private void updateGeoQuery() {
+        if (geoQuery == null) {
+            final DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+            GeoFire geoFire = new GeoFire(ref.child("geofire"));
+            geoQuery = geoFire.queryAtLocation(new GeoLocation(latitude, longitude), radius);
+
+
+            geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
+                private HashMap<String, Marker> markers = new HashMap<>();
+                private HashMap<String, ValueEventListener> listeners = new HashMap<>();
+                final DatabaseReference tasks = ref.child("tasks");
+                final String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                @Override
+                public void onKeyEntered(final String key, final GeoLocation location) {
+                    listeners.put(key, new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    final UCSDTask task = dataSnapshot.getValue(UCSDTask.class);
+
+                                    if (task.getAuthorID() == userID) {
+                                        tasks.removeEventListener(this);
+                                        return;
+                                    }
+
+                                    Marker marker;
+                                    if (markers.containsKey(key)) {
+                                        marker = markers.get(key);
+                                        marker.setPosition(new LatLng(location.latitude, location.longitude));
+                                    }
+                                    else {
+                                        marker = mMap.addMarker(
+                                                new MarkerOptions()
+                                                        .position(new LatLng(location.latitude, location.longitude))
+                                        );
+                                        markers.put(key, marker);
+                                    }
+                                    marker.setTitle(task.getTitle());
+                                    marker.setSnippet(task.getDescription());
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    // TODO: Report that fetching failed to load data
+                                }
+                            }
+                    );
+                    tasks.child(key).addValueEventListener(listeners.get(key));
+                }
+
+                @Override
+                public void onKeyExited(String key) {
+                    markers.remove(key).remove();
+                    tasks.child(key).removeEventListener(listeners.remove(key));
+
+                }
+
+                @Override
+                public void onKeyMoved(String key, GeoLocation location) {
+                    markers.get(key).setPosition(new LatLng(location.latitude, location.longitude));
+                }
+
+                @Override
+                public void onGeoQueryReady() {
+
+                }
+
+                @Override
+                public void onGeoQueryError(DatabaseError error) {
+
+                }
+            });
+        }
+        else {
+            geoQuery.setLocation(new GeoLocation(latitude, longitude), radius);
+        }
+    }
 
     /**
      * Method onRequestPermissionsResults
@@ -156,47 +197,47 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      * It will enable location tracking and zoom to user's location.
      */
 
+    public boolean startUp() {
+        // enables location features
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+        String locationProvider = LocationManager.GPS_PROVIDER;
+        try {
+            mMap.setMyLocationEnabled(true);
+            Location location = locationManager.getLastKnownLocation(locationProvider);
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+            updateGeoQuery();
+            LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.0f));
+            locationManager.requestLocationUpdates(locationProvider, 0, 100, locationListener);
+            return true;
+        }
+        catch (SecurityException e) {
+            Toast.makeText(this, "Location not enabled", Toast.LENGTH_LONG).show();
+            return false;
+        }
+    }
+
+
     // This will run automatically after user approves location data
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (enableLocationZoom()) {
+        if (requestCode == 1) {
+            // If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0) {
+                startUp();
+            } else {
+
+                // permission denied, boo! Disable the
+                // functionality that depends on this permission.
+            }
         }
         else {
             Toast.makeText(this, "Location not enabled", Toast.LENGTH_LONG).show();
         }
     }
 
-
-    /**
-     * Method enableLocationZoom
-     *
-     * Checks if user granted locations permissions and enables location features + zooms to their
-     * location if they did.
-     */
-
-    private boolean enableLocationZoom() {
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) ==
-                        PackageManager.PERMISSION_GRANTED) {
-
-            // enables location features
-            mMap.setMyLocationEnabled(true);
-            mMap.getUiSettings().setMyLocationButtonEnabled(true);
-
-            // moves camera to current user location, zooms
-            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.0f));
-
-            return true;
-        }
-        // user did not enable location permissions
-        else {
-            return false;
-        }
-    }
 
 
     /**
@@ -210,13 +251,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         public void onLocationChanged(Location location) {
             longitude = location.getLongitude();
             latitude = location.getLatitude();
+            updateGeoQuery();
         }
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {}
 
         @Override
-        public void onProviderEnabled(String provider) {}
+        public void onProviderEnabled(String provider) {
+
+        }
 
         @Override
         public void onProviderDisabled(String provider) {}
