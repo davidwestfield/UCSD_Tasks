@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -8,9 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
-        android:paddingTop="16dp"
+        android:paddingTop="32dp"
         android:text="Task Name:"
-        android:textSize="24sp" />
+        android:textSize="16sp" />
 
     <EditText
         android:id="@+id/task_name"
@@ -19,8 +20,9 @@
         android:background="@android:color/transparent"
         android:hint="Walk my dog"
         android:paddingLeft="16dp"
+        android:paddingTop="8dp"
         android:textColorHint="#BDBDBD"
-        android:textSize="18sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -28,7 +30,7 @@
         android:paddingLeft="16dp"
         android:paddingTop="8dp"
         android:text="Starting Offer:"
-        android:textSize="24sp" />
+        android:textSize="16sp" />
 
     <EditText
         android:id="@+id/starting_offer"
@@ -38,8 +40,9 @@
         android:hint="$0.00"
         android:inputType="numberSigned"
         android:paddingLeft="16dp"
+        android:paddingTop="8dp"
         android:textColorHint="#BDBDBD"
-        android:textSize="24sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -47,7 +50,7 @@
         android:paddingLeft="16dp"
         android:paddingTop="8dp"
         android:text="Specify Location:"
-        android:textSize="24sp" />
+        android:textSize="16sp" />
 
 
     <TextView
@@ -57,28 +60,31 @@
         android:hint="Current Location"
         android:onClick="openPlaceSelector"
         android:paddingLeft="16dp"
+        android:paddingTop="8dp"
         android:textColorHint="#BDBDBD"
-        android:textSize="24sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
-        android:paddingTop="16dp"
+        android:paddingTop="8dp"
         android:text="Description:"
-        android:textSize="24sp" />
+        android:textSize="16sp" />
 
     <EditText
         android:id="@+id/description"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
+        android:hint="Bring yourself a water bottle. He's a fast one ;)"
         android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
         android:paddingLeft="16dp"
-        android:textSize="18sp" />
+        android:paddingTop="8dp"
+        android:textColorHint="#BDBDBD"
+        android:textSize="14sp" />
 
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.design.widget.CoordinatorLayout
         android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -91,7 +97,7 @@
             android:layout_margin="16dp"
             android:clickable="true"
             android:onClick="pushTask"
-            android:src="@drawable/ic_done_white_24dp"
+            android:src="@drawable/ic_send_white_24dp"
             app:layout_anchorGravity="bottom|right|end" />
 
     </android.support.design.widget.CoordinatorLayout>
