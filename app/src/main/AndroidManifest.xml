@@ -39,7 +39,7 @@
 
         <activity
             android:name=".auth.AuthActivity"
-            android:label="@string/title_activity_maps">
+            android:label="Task It">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,7 +48,10 @@
         </activity>
         <activity
             android:name=".CreateTask"
-            android:label="@string/title_activity_create_task">
+            android:label="Create a Task">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".auth.AuthActivity" />
             <intent-filter>
                 <action android:name="android.intent.action.CREATE" />
 
