@@ -62,8 +62,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
  */
 
     private GoogleMap mMap;
-    private double longitude;
-    private double latitude;
+    private Double longitude;
+    private Double latitude;
     private double radius = 40.0;
     private LocationManager locationManager;
     private GeoQuery geoQuery;
@@ -190,12 +190,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    /**
-     * Method onRequestPermissionsResults
-     *
-     * This callback is triggered when the user approves locations permissions.
-     * It will enable location tracking and zoom to user's location.
-     */
+
+    public void focus(Location location) {
+        longitude = location.getLongitude();
+        latitude = location.getLatitude();
+        LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.0f));
+        updateGeoQuery();
+    }
 
     public boolean startUp() {
         // enables location features
@@ -205,11 +207,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         try {
             mMap.setMyLocationEnabled(true);
             Location location = locationManager.getLastKnownLocation(locationProvider);
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-            updateGeoQuery();
-            LatLng latlng = new LatLng(location.getLatitude(), location.getLongitude());
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15.0f));
+            if (location != null) {
+                focus(location);
+            }
             locationManager.requestLocationUpdates(locationProvider, 0, 100, locationListener);
             return true;
         }
@@ -219,6 +219,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+
+    /**
+     * Method onRequestPermissionsResults
+     *
+     * This callback is triggered when the user approves locations permissions.
+     * It will enable location tracking and zoom to user's location.
+     */
 
     // This will run automatically after user approves location data
     @Override
@@ -249,6 +256,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
+            if (longitude == null || latitude == null) {
+                focus(location);
+            }
             longitude = location.getLongitude();
             latitude = location.getLatitude();
             updateGeoQuery();
@@ -259,6 +269,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         @Override
         public void onProviderEnabled(String provider) {
+
 
         }
 

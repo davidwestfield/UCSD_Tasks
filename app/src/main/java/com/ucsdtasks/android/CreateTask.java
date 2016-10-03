@@ -22,6 +22,7 @@ import com.google.android.gms.auth.GooglePlayServicesAvailabilityException;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.identity.intents.Address;
+import com.google.android.gms.location.places.GeoDataApi;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceDetectionApi;
 import com.google.android.gms.location.places.internal.PlaceEntity;
