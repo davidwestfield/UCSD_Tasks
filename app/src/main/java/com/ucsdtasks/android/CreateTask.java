@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static android.R.attr.checked;
 import static com.ucsdtasks.android.R.id.task_name;
 
 
@@ -162,4 +164,27 @@ public class CreateTask extends AppCompatActivity {
         }
     }
 
+    /**
+     * This method update the status of the post whether the user wants to have it available
+     * for his/her facebook friend to see.
+     *
+     * @param view
+     * @return privacy_public which is the status of the publicity.
+     */
+    public boolean onRadioButtonClicked(View view) {
+        boolean privacy_public = false;
+        boolean checked = ((RadioButton) view).isChecked();
+
+        switch (view.getId()) {
+            case R.id.public_radio:
+                if(checked)
+                    privacy_public = true;
+                break;
+            case R.id.private_radio:
+                if(checked)
+                    privacy_public = false;
+                break;
+        }
+        return privacy_public;
+    }
 }

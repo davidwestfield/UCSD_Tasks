@@ -6,10 +6,43 @@
     android:orientation="vertical">
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Publicity Status:"
+        android:textSize="16dp"
+        android:paddingTop="32dp"
+        android:paddingLeft="16dp"/>
+
+    <RadioGroup
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp">
+
+        <RadioButton
+            android:id="@+id/public_radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Public"
+            android:onClick="onRadioButtonClicked"
+            android:textSize="14sp"/>
+
+        <RadioButton
+            android:id="@+id/private_radio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Private"
+            android:onClick="onRadioButtonClicked"
+            android:textSize="14sp"/>
+
+    </RadioGroup>
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="16dp"
-        android:paddingTop="32dp"
+        android:paddingTop="16dp"
         android:text="Task Name:"
         android:textSize="16sp" />
 
@@ -38,7 +71,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:hint="$0.00"
-        android:inputType="numberSigned"
+        android:inputType="numberDecimal"
         android:paddingLeft="16dp"
         android:paddingTop="8dp"
         android:textColorHint="#BDBDBD"
