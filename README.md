@@ -4,4 +4,11 @@ Developers:
 Daniel Sonnier, Kevin Wong, Anil Jethani, Raj Kumar
 
 Description:
-Android App for creating and completing tasks local to the UCSD area. Users fill out a price, location, description to create a "task". The task is then pinnes the automatically to the specified location on Google Maps within the app. From this map ussrs can browse local "tasks" that need completing and in hopes of getting a little cash - and the pleasure of helping another student! 
+Android App for creating and completing tasks local to the UCSD area.
+
+Users fill out a 
+- Price
+- Location
+- Description
+
+And a "task" is generated. The task is then pinned automatically to Google Maps within the app. From this map any user can browse local tasks that need completing and see a description along with a financial incentive.
