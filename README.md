@@ -7,7 +7,7 @@ UCSD Tasks is an Android App for creating and completing tasks local to the UCSD
 - Location
 - Description
 
-And a "task" is generated. The task is pinned automatically to Google Maps within the app. From this map any user who is a "fulfiller" can browse local tasks that need completing and see the description along with the financial incentive for performing the task. With this model user an economy of task "sellers" and task "fulfillers" is created.
+And a "task" is generated. The task is pinned automatically to Google Maps within the app. From this map any user who is a "fulfiller" can browse local tasks that need completing and see the description along with the financial incentive for performing the task. With this model an economy of task "sellers" and task "fulfillers" is created.
 
 
 Developers:
